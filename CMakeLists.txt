@@ -25,7 +25,6 @@ add_executable(SearchAssets
     src/SearchEngine.h
     src/UI.cpp
     src/UI.h
-    src/Logger.h
 )
 
 # Link libraries
