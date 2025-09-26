@@ -19,7 +19,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(ftxui)
 
 # Create executable
-add_executable(SearchAssets
+add_executable(SearchAssetsV2
     src/main.cpp
     src/SearchEngine.cpp
     src/SearchEngine.h
@@ -28,7 +28,7 @@ add_executable(SearchAssets
 )
 
 # Link libraries
-target_link_libraries(SearchAssets
+target_link_libraries(SearchAssetsV2
     PRIVATE
     ftxui::screen
     ftxui::dom
@@ -37,13 +37,13 @@ target_link_libraries(SearchAssets
 )
 
 # Include directories
-target_include_directories(SearchAssets PRIVATE src)
+target_include_directories(SearchAssetsV2 PRIVATE src)
 
 # Compiler-specific options
 if(MSVC)
-    target_compile_options(SearchAssets PRIVATE /W4)
+    target_compile_options(SearchAssetsV2 PRIVATE /W4)
 else()
-    target_compile_options(SearchAssets PRIVATE -Wall -Wextra -Wpedantic)
+    target_compile_options(SearchAssetsV2 PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
 # Create src directory if it doesn't exist
