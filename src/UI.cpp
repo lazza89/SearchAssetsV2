@@ -163,6 +163,8 @@ void SearchAssetsUI::create_ui()
     // Buttons
     button_search_ = Button("Search", [this]()
                             { perform_search(); });
+    button_stop_ = Button("Stop", [this]()
+                          { if (search_engine_) search_engine_->stop_search(); });
     button_clear_ = Button("Clear Results", [this]()
                            { reset_search(); });
     button_copy_all_ = Button("Copy All Results", [this]()
@@ -218,6 +220,7 @@ void SearchAssetsUI::create_ui()
                                                Renderer(input_filter_, [this]()
                                                         { return input_filter_->Render() | border; }),
                                                Container::Horizontal({button_search_,
+                                                                      button_stop_,
                                                                       button_clear_,
                                                                       button_copy_all_})});
 

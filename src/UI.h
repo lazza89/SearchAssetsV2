@@ -63,6 +63,7 @@ private:
     ftxui::Component checkbox_plugins_;
     ftxui::Component checkbox_unreal_prefixes_;
     ftxui::Component button_search_;
+    ftxui::Component button_stop_;
     ftxui::Component button_clear_;
     ftxui::Component button_copy_all_;
     ftxui::Component results_list_;
