@@ -195,10 +195,11 @@ void SearchAssetsUI::create_ui()
         return false; });
 
     // Main layout
-    auto input_section = Container::Vertical({Renderer(input_search_, [this]()
-                                                       { return vbox({text("Search Pattern:") | bold,
-                                                                      text("Tip: For Unreal classes, remove prefixes (APlayerBox → PlayerBox)") | dim | color(Color::Yellow),
-                                                                      input_search_->Render() | border}); }),
+    auto input_section = Container::Vertical({Container::Vertical({Container::Horizontal({Renderer([this]()
+                                                                                                   { return text("Search Pattern:") | bold; }),
+                                                                                          checkbox_unreal_prefixes_ | color(Color::Orange1)}),
+                                                                   Renderer(input_search_, [this]()
+                                                                            { return input_search_->Render() | border; })}),
                                               Renderer(input_path_, [this]()
                                                        { return vbox({text("Custom Path (leave empty for default Content/Assets):") | bold,
                                                                       input_path_->Render() | border}); }),
@@ -208,8 +209,7 @@ void SearchAssetsUI::create_ui()
                                                                      Renderer(input_max_size_, [this]()
                                                                               { return vbox({text("Max Size (KB):") | bold,
                                                                                              input_max_size_->Render() | border}); })}),
-                                              Container::Horizontal({checkbox_plugins_,
-                                                                     checkbox_unreal_prefixes_})});
+                                              checkbox_plugins_ | color(Color::Orange1)});
 
     // Filter section with copy button
     auto filter_section = Container::Vertical({Renderer([this]()
