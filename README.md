@@ -1,6 +1,7 @@
 # Asset Search Tool V2 Turbo compressed (C++ Multithreaded)
 
 A high-performance C++ version of the PowerShell asset search tool with modern terminal UI using ftxui.
+![](img/program.jpg)
 
 ## Features
 
