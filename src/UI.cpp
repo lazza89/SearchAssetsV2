@@ -166,6 +166,8 @@ void SearchAssetsUI::create_ui()
                             { perform_search(); });
     button_clear_ = Button("Clear Results", [this]()
                            { reset_search(); });
+    button_copy_all_ = Button("Copy All Results", [this]()
+                              { copy_all_results(); });
 
     // Results list - use filtered results with click handler
     results_list_ = Menu(&filtered_result_lines_, &selected_result_);
@@ -209,17 +211,17 @@ void SearchAssetsUI::create_ui()
                                                                                              input_max_size_->Render() | border}); })}),
                                               Container::Horizontal({checkbox_plugins_,
                                                                      checkbox_case_,
-                                                                     checkbox_unreal_prefixes_}),
-                                              Container::Horizontal({button_search_,
-                                                                     button_clear_}) |
-                                                  size(HEIGHT, EQUAL, 1)});
+                                                                     checkbox_unreal_prefixes_})});
 
-    // Filter section - simple and working
+    // Filter section with copy button
     auto filter_section = Container::Vertical({Renderer([this]()
                                                         { return vbox({text("Filter Results:") | bold,
                                                                        text("Type to filter results in real-time") | dim | color(Color::Yellow)}); }),
                                                Renderer(input_filter_, [this]()
-                                                        { return input_filter_->Render() | border; })});
+                                                        { return input_filter_->Render() | border; }),
+                                               Container::Horizontal({button_search_,
+                                                                      button_clear_,
+                                                                      button_copy_all_})});
 
     auto results_section = Renderer(results_list_, [this]()
                                     {
@@ -296,7 +298,7 @@ void SearchAssetsUI::create_ui()
                                               separator(),
                                               input_section->Render() | size(HEIGHT, EQUAL, 14),
                                               separator(),
-                                              filter_section->Render() | size(HEIGHT, EQUAL, 5),
+                                              filter_section->Render() | size(HEIGHT, EQUAL, 8),
                                               separator(),
                                               results_section->Render() | flex}) |
                                         border; });
@@ -554,4 +556,32 @@ std::string SearchAssetsUI::remove_unreal_prefix(const std::string &filename)
     }
 
     return filename;
+}
+
+void SearchAssetsUI::copy_all_results()
+{
+    std::lock_guard<std::mutex> lock(results_mutex_);
+
+    if (filtered_result_lines_.empty())
+    {
+        last_copied_item_ = "No results to copy";
+        needs_refresh_ = true;
+        return;
+    }
+
+    // Create a formatted string with all results
+    std::stringstream ss;
+    ss << "Search Results (" << filtered_result_lines_.size() << " items):\n";
+    ss << "====================================\n";
+
+    for (size_t i = 0; i < filtered_result_lines_.size(); ++i)
+    {
+        ss << (i + 1) << ". " << filtered_result_lines_[i] << "\n";
+    }
+
+    std::string all_results = ss.str();
+    setClipboard(all_results);
+
+    last_copied_item_ = std::to_string(filtered_result_lines_.size()) + " results copied to clipboard";
+    needs_refresh_ = true;
 }
