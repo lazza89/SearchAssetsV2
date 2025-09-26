@@ -291,8 +291,8 @@ void SearchAssetsUI::create_ui()
 
     main_container_ = Renderer(main_container_, [this, input_section, filter_section, results_section]()
                                { return vbox({text("SEARCH ASSETS TOOL V2") | bold | center | color(Color::Cyan) | size(HEIGHT, EQUAL, 2),
-                                              text("Powered by 300 exc 2t six days a miscela al 3% perchè ho paura di grippare") | dim | center | color(Color::White),
-                                              text("Enter/F5 to search | F6 to paste | Click on result to copy name") | dim | center,
+                                              // text("Powered by 300 exc 2t six days a miscela al 3% perchè ho paura di grippare") | dim | center | color(Color::White),
+                                              text("Enter/F5 to search | Ctrl + V/F6 to paste | Click on result to copy name") | dim | center,
                                               separator(),
                                               input_section->Render() | size(HEIGHT, EQUAL, 14),
                                               separator(),
