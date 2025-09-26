@@ -167,34 +167,13 @@ void SearchAssetsUI::create_ui()
                           { if (search_engine_) search_engine_->stop_search(); });
     button_clear_ = Button("Clear Results", [this]()
                            { reset_search(); });
+    button_copy_selected_ = Button("Copy Selected", [this]()
+                                   { copy_selected_result(); });
     button_copy_all_ = Button("Copy All Results", [this]()
                               { copy_all_results(); });
 
     // Results list - use filtered results with click handler
     results_list_ = Menu(&filtered_result_lines_, &selected_result_);
-
-    // Add event handler for mouse click to copy selected item
-    results_list_ = CatchEvent(results_list_, [this](Event event)
-                               {
-        if (event.is_mouse() && event.mouse().button == Mouse::Left &&
-            event.mouse().motion == Mouse::Pressed &&
-            selected_result_ >= 0 &&
-            selected_result_ < static_cast<int>(filtered_result_lines_.size())) {
-
-            std::string selected_item = filtered_result_lines_[selected_result_];
-
-            // Remove file extension
-            size_t dot_pos = selected_item.find_last_of('.');
-            if (dot_pos != std::string::npos) {
-                selected_item = selected_item.substr(0, dot_pos);
-            }
-
-            setClipboard(selected_item);
-            last_copied_item_ = selected_item;
-            needs_refresh_ = true;
-            return true;
-        }
-        return false; });
 
     // Main layout
     auto input_section = Container::Vertical({Container::Vertical({Container::Horizontal({Renderer([this]()
@@ -222,6 +201,7 @@ void SearchAssetsUI::create_ui()
                                                Container::Horizontal({button_search_,
                                                                       button_stop_,
                                                                       button_clear_,
+                                                                      button_copy_selected_,
                                                                       button_copy_all_})});
 
     auto results_section = Renderer(results_list_, [this]()
@@ -295,7 +275,7 @@ void SearchAssetsUI::create_ui()
     main_container_ = Renderer(main_container_, [this, input_section, filter_section, results_section]()
                                { return vbox({text("SEARCH ASSETS TOOL V2") | bold | center | color(Color::Cyan) | size(HEIGHT, EQUAL, 2),
                                               // text("Powered by 300 exc 2t six days a miscela al 3% perchè ho paura di grippare") | dim | center | color(Color::White),
-                                              text("Enter/F5 to search | Ctrl + V/F6 to paste | Click on result to copy name") | dim | center,
+                                              text("Enter/F5 to search | Ctrl + V/F6 to paste") | dim | center,
                                               separator(),
                                               input_section->Render() | size(HEIGHT, EQUAL, 14),
                                               separator(),
@@ -557,6 +537,33 @@ std::string SearchAssetsUI::remove_unreal_prefix(const std::string &filename)
     }
 
     return filename;
+}
+
+void SearchAssetsUI::copy_selected_result()
+{
+    std::lock_guard<std::mutex> lock(results_mutex_);
+
+    if (filtered_result_lines_.empty() ||
+        selected_result_ < 0 ||
+        selected_result_ >= static_cast<int>(filtered_result_lines_.size()))
+    {
+        last_copied_item_ = "No result selected";
+        needs_refresh_ = true;
+        return;
+    }
+
+    std::string selected_item = filtered_result_lines_[selected_result_];
+
+    // Remove file extension
+    size_t dot_pos = selected_item.find_last_of('.');
+    if (dot_pos != std::string::npos)
+    {
+        selected_item = selected_item.substr(0, dot_pos);
+    }
+
+    setClipboard(selected_item);
+    last_copied_item_ = selected_item;
+    needs_refresh_ = true;
 }
 
 void SearchAssetsUI::copy_all_results()

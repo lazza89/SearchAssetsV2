@@ -26,6 +26,7 @@ private:
     void perform_search();
     void reset_search();
     void update_filtered_results();
+    void copy_selected_result();
     void copy_all_results();
     std::string remove_unreal_prefix(const std::string& filename);
 
@@ -65,6 +66,7 @@ private:
     ftxui::Component button_search_;
     ftxui::Component button_stop_;
     ftxui::Component button_clear_;
+    ftxui::Component button_copy_selected_;
     ftxui::Component button_copy_all_;
     ftxui::Component results_list_;
 
