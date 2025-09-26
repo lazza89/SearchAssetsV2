@@ -40,6 +40,7 @@ void SearchEngine::search(const std::string& search_pattern,
     clear_results();
 
     try {
+        // Use case insensitive regex
         compiled_pattern_ = std::regex(search_pattern, std::regex_constants::icase);
         std::vector<std::future<void>> futures;
 

@@ -34,7 +34,6 @@ private:
     std::string custom_path_;
     std::string result_filter_{""};
     bool search_plugins_{false};
-    bool case_sensitive_{false};
     bool remove_unreal_prefixes_{true};
 
     // File size limits (in KB for easier UI)
@@ -62,7 +61,6 @@ private:
     ftxui::Component input_min_size_;
     ftxui::Component input_max_size_;
     ftxui::Component checkbox_plugins_;
-    ftxui::Component checkbox_case_;
     ftxui::Component checkbox_unreal_prefixes_;
     ftxui::Component button_search_;
     ftxui::Component button_clear_;

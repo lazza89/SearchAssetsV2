@@ -158,7 +158,6 @@ void SearchAssetsUI::create_ui()
     input_max_size_ = Input(&max_file_size_str_, "Max size (KB)");
 
     checkbox_plugins_ = Checkbox("Search in Plugins/*/Content", &search_plugins_);
-    checkbox_case_ = Checkbox("Case sensitive", &case_sensitive_);
     checkbox_unreal_prefixes_ = Checkbox("Remove Unreal prefixes (A,U,F,S,T,E,I)", &remove_unreal_prefixes_);
 
     // Buttons
@@ -210,7 +209,6 @@ void SearchAssetsUI::create_ui()
                                                                               { return vbox({text("Max Size (KB):") | bold,
                                                                                              input_max_size_->Render() | border}); })}),
                                               Container::Horizontal({checkbox_plugins_,
-                                                                     checkbox_case_,
                                                                      checkbox_unreal_prefixes_})});
 
     // Filter section with copy button
